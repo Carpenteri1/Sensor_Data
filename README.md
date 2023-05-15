@@ -1,4 +1,5 @@
 # Sensor_Data
+An assignment to see in what level Iam in my coding and understanding on solving this task.
 
 ## The assignment
 
