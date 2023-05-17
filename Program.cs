@@ -29,7 +29,7 @@ using System.Collections;
     var storePackBytes = packetBytes.Length;
     Array.Resize(ref packetBytes, 16);
     Guid uuid = new Guid(packetBytes);
-    string encodedString = uuid.ToString();
+    string name = uuid.ToString();
     Array.Resize(ref packetBytes, storePackBytes);
 
     int temperatureOffset = 13 + nameLength;
@@ -38,9 +38,9 @@ using System.Collections;
             int humidity = BitConverter.ToInt16(packetBytes, humidityOffset);
 
     // Output the sensor data to log files
-    string logFileName = $"_{DateTime.Now:yyyyMMdd}.log";
+    string logFileName = $"{name}_{DateTime.Now:yyyyMMdd}.log";
 
-    string logEntry = $"Timestamp: {timestamp:yyyy-MM-ddTHH:mm:sszzz}, Name: {uuid}, Temperature: {temperature}°C, Humidity: {humidity}‰";
+    string logEntry = $"Timestamp: {timestamp:yyyy-MM-ddTHH:mm:sszzz}, Name: {name}, Temperature: {temperature}°C, Humidity: {humidity}‰";
 
     File.AppendAllText(logFileName, logEntry + Environment.NewLine);
 
