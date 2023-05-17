@@ -1,8 +1,8 @@
-﻿
 using System.Text;
 using System.Diagnostics;
+using System.Collections;
 
-        // Spawn the sensor simulator process and capture its stdout
+// Spawn the sensor simulator process and capture its stdout
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = "./sensor_data.x86_64-apple-darwin",
@@ -23,23 +23,26 @@ using System.Diagnostics;
             stdoutReader.BaseStream.Read(packetBytes, 0, packetLength);
 
     uint timestampMillis = BitConverter.ToUInt32(packetBytes, 4);
-
-    // Extract the sensor data fields from the packet
-    //long timestampMillis = BitConverter.ToInt64(packetBytes, 4);
     DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(timestampMillis).DateTime;
-
+    
     int nameLength = packetBytes[12];
-            string name = Encoding.UTF8.GetString(packetBytes, 13, nameLength);
-            int temperatureOffset = 13 + nameLength;
+    var storePackBytes = packetBytes.Length;
+    Array.Resize(ref packetBytes, 16);
+    Guid uuid = new Guid(packetBytes);
+    string name = uuid.ToString();
+    Array.Resize(ref packetBytes, storePackBytes);
+
+    int temperatureOffset = 13 + nameLength;
             int temperature = BitConverter.ToInt32(packetBytes, temperatureOffset);
             int humidityOffset = temperatureOffset + 3;
             int humidity = BitConverter.ToInt16(packetBytes, humidityOffset);
 
     // Output the sensor data to log files
-    string logFileName = $"_{DateTime.Now:yyyyMMdd}.log";
+    string logFileName = $"{name}_{DateTime.Now:yyyyMMdd}.log";
 
     string logEntry = $"Timestamp: {timestamp:yyyy-MM-ddTHH:mm:sszzz}, Name: {name}, Temperature: {temperature}°C, Humidity: {humidity}‰";
-            File.AppendAllText(logFileName, logEntry + Environment.NewLine);
+
+    File.AppendAllText(logFileName, logEntry + Environment.NewLine);
 
             Console.WriteLine(logEntry);
         }
