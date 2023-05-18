@@ -1,8 +1,10 @@
 using System.Diagnostics;
-using sensor_data.Data.DataStrings;
+using sensor_data.Utility.Data.DataStrings;
 using sensor_data.Data.Encoders;
 using sensor_data.Models;
-using sensor_data.Services;
+using sensor_data.Utility;
+using Newtonsoft.Json;
+using sensor_data.Utility.Data.LogData;
 
 string argument = "";
 var sensorProcess = ProcessBuilder.BuildNewProcessStartInfo(argument);
@@ -26,11 +28,20 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
             throw new ArgumentException(string.Format(
                     ExceptionMessageStrings.IsEmptyOrNull), nameof(e.Data));
 
-        Console.WriteLine(new SensorDataModel(
-            timeStamp: BinaryEncoder.GetTimeStamp(e),
-            sensorName: BinaryEncoder.NameEncoder(e, argument),
-            temperature: BinaryEncoder.GetTemperature(e),
-            humidity: BinaryEncoder.GetHumidity(e)).ToString());
+        var dataModel = new SensorDataModel
+        {
+            Timestamp = BinaryEncoder.GetTimeStamp(e),
+            SensorName = BinaryEncoder.NameEncoder(e, argument),
+            Temperature = BinaryEncoder.GetTemperature(e),
+            Humidity = BinaryEncoder.GetHumidity(e)
+        };
+        Console.WriteLine(dataModel.ToString());
+        /*
+        LogData.AppendFileAndWrite(dataModel);
+        string logFileName = $"{dataModel.SensorName}_{DateTime.Now:yyyyMMdd}.json";
+        string filePath = Path.Combine(Environment.CurrentDirectory, logFileName);
+        string logEntry = dataModel.ToString();*/
+        //File.WriteAllText(,);
 
         //Console.WriteLine(string.Format(MainProgramStrings.CompleteDataString),name);
     }
@@ -47,13 +58,3 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
         Console.WriteLine(ex.Message);
     }
 }
-
-/* TODO
-// Output the sensor data to log files
-string logFileName = $"{name}_{DateTime.Now:yyyyMMdd}.log";
-
-//string logEntry = $"Timestamp: {timestamp:yyyy-MM-ddTHH:mm:sszzz}, Name: {name}, Temperature: {temperature}°C, Humidity: {humidity}‰";
-string logEntry = $"Timestamp: {timestamp}, Name: {name},";
-
-//File.AppendAllText(logFileName, logEntry + Environment.NewLine);
-*/

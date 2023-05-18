@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
 using System.Net;
 using System.Text;
-using sensor_data.Data.DataStrings;
+using sensor_data.Utility;
+using sensor_data.Utility.Data.DataStrings;
 
 namespace sensor_data.Data.Encoders
 {
-    public class BinaryEncoder
+    public static class BinaryEncoder
     {
         const int PacketLengthOffset = 0;
         private const int NameLengthOffset = 12;

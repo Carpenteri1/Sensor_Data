@@ -1,9 +1,9 @@
-﻿using sensor_data.Data.DataStrings;
+﻿using sensor_data.Utility.Data.DataStrings;
 using System.Diagnostics;
 
-namespace sensor_data.Services
+namespace sensor_data.Utility
 {
-	public class ProcessBuilder
+	public static class ProcessBuilder
 	{
 		public static Process BuildNewProcessStartInfo(string argument)
 		{

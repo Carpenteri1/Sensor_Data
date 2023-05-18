@@ -1,7 +1,6 @@
-﻿using System;
-namespace sensor_data.Data.Encoders
+﻿namespace sensor_data.Utility
 {
-	public class CelsiusConverter
+	public static class CelsiusConverter
 	{
 		public static float KelvinToCelsiusAsFloat(uint kelvinValue)
 		{

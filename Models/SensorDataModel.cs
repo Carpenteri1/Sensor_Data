@@ -1,24 +1,13 @@
-﻿namespace sensor_data.Models
+﻿using sensor_data.AbstractClasses;
+namespace sensor_data.Models
 {
-	public class SensorDataModel
-	{
-        private string Timestamp { get; set; }
-        private string SensorName { get; set; }
-        private uint? Temperature { get; set; }
-        private uint? Humidity { get; set; }
-
-        public SensorDataModel(
-            string timeStamp,
-            string sensorName,
-            uint? temperature,
-            uint? humidity)
-        {
-            Timestamp = timeStamp;
-            SensorName = sensorName;
-            Temperature = temperature;
-            Humidity = humidity;
-        }
-
+	public class SensorDataModel : AbstractSensorDataModel
+    {
+        public override string Timestamp { get; set; }
+        public override string SensorName { get; set; }
+        public override uint? Temperature { get; set; }
+        public override uint? Humidity { get; set; }
+   
         public override string ToString()
         {
             return $"" +
