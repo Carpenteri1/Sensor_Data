@@ -25,6 +25,17 @@ The simulator will most of the time send both temperature and humidity but can a
 The log file shall contain logs of the sensor data in JSON-format. 
 Each log line shall contain one JSON document, with the following format:
 
+```
+----------------------------------------------------------------------------------
+Key.              Required                 Format/Unit               Type
+----------------------------------------------------------------------------------
+timespan         Yes.                 ISO 8601 with time zone.       UTF-8 String
+name             Yes                                                 UTF-8 String
+temperature.     If present °C.                                      Float
+humidity         If present %                                        Float
+----------------------------------------------------------------------------------
+```
+
 ### E.g:
 ```
 {
