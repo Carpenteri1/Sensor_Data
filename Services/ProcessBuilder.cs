@@ -7,16 +7,17 @@ namespace sensor_data.Services
 	{
 		public static Process BuildNewProcessStartInfo(string argument)
 		{
-            		ProcessStartInfo startInfo = new ProcessStartInfo
-            		{
-                		FileName = BinaryEncoderStrings.FileName,
-                		RedirectStandardOutput = true,
-                		UseShellExecute = false
-            		};
-            		if(!string.IsNullOrEmpty(argument))
-				startInfo.Arguments = $"--name {argument}";
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = BinaryEncoderStrings.FileName,
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
 
-            		return Process.Start(startInfo);
-        	}
+            if(!string.IsNullOrEmpty(argument))
+		        startInfo.Arguments = $"--name {argument}";
+
+            return Process.Start(startInfo);
+        }
 	}
 }
