@@ -59,6 +59,7 @@ namespace sensor_data.Data.Encoders
             return CelsiusConverter.KelvinToCelsiusAsUInt(tempInKelvin);
         }
 
+        //TODO if there is no temp should be 13 + nlen
         public static uint GetHumidity(DataReceivedEventArgs e)
         {
             byte[] sensorData = e.Data.Select(c => (byte)c).ToArray();
