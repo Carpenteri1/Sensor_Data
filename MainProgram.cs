@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using sensor_data.Data.DataStrings;
 using sensor_data.Data.Encoders;
+using sensor_data.Models;
 using sensor_data.Services;
 
 string argument = "";
@@ -25,10 +26,12 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
             throw new ArgumentException(string.Format(
                     ExceptionMessageStrings.IsEmptyOrNull), nameof(e.Data));
 
-        string name = BinaryEncoder.NameEncoder(e, argument);
-        string timestamp = BinaryEncoder.GetTimeStamp(e);
+        Console.WriteLine(new SensorDataModel(
+            timeStamp: BinaryEncoder.GetTimeStamp(e),
+            sensorName: BinaryEncoder.NameEncoder(e, argument),
+            temperature: BinaryEncoder.GetTemperature(e),
+            humidity: BinaryEncoder.GetHumidity(e)).ToString());
 
-        Console.WriteLine($"Timespan: {timestamp}, Name: {name},");
         //Console.WriteLine(string.Format(MainProgramStrings.CompleteDataString),name);
     }
     catch (FormatException ex)
@@ -45,13 +48,7 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
     }
 }
 
-/*
- TODO implement temperture and humidity, also log file.
-int temperatureOffset = 13 + nameLength;
-int temperature = BitConverter.ToInt32(packetBytes, temperatureOffset);
-int humidityOffset = temperatureOffset + 3;
-int humidity = BitConverter.ToInt16(packetBytes, humidityOffset);
-
+/* TODO
 // Output the sensor data to log files
 string logFileName = $"{name}_{DateTime.Now:yyyyMMdd}.log";
 

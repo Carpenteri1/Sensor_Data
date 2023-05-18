@@ -5,11 +5,13 @@ using sensor_data.Data.DataStrings;
 
 namespace sensor_data.Data.Encoders
 {
-	public class BinaryEncoder
-	{
+    public class BinaryEncoder
+    {
         const int PacketLengthOffset = 0;
-        const int NameLengthOffset = 12;
-        const int NameOffset = 13;
+        private const int NameLengthOffset = 12;
+        private const int NameOffset = 13;
+        private const int TemperatureOffset = NameLengthOffset + NameOffset;
+        private const int HumidityOffset = TemperatureOffset + 3;
 
         public static string NameEncoder(DataReceivedEventArgs e, string argument)
         {
@@ -18,22 +20,23 @@ namespace sensor_data.Data.Encoders
             if (sensorData.Length < NameOffset + 1)
                 throw new FormatException(ExceptionMessageStrings.InvalidSensorData);
 
-            // Extract name length
-            byte nameLength = sensorData[NameLengthOffset];
-
             // Check if the data contains enough bytes to read the name
-            if (sensorData.Length < NameOffset + 1 + nameLength)
+            if (sensorData.Length < NameOffset + 1 + GetNameLengthOffset(sensorData))
                 throw new FormatException(ExceptionMessageStrings.InvalidSensorData);
 
             //TODO Try extract name using ASCII encoding if not working
-            string name = Encoding.UTF8.GetString(sensorData, NameOffset, nameLength);
+            string name = Encoding.UTF8.GetString(
+                sensorData,
+                NameOffset,
+                GetNameLengthOffset(sensorData));
+
             //TODO make custom exception here.
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("name is null for test only");
 
             //TODO need to extract argument value from name using regex
             //if (argument != name)
-             //   throw new ArgumentException();
+            //   throw new ArgumentException();
             return name;
         }
 
@@ -48,15 +51,23 @@ namespace sensor_data.Data.Encoders
 
             return timestampFormatted;
         }
-      
-        public static int GetTemperature(byte[] packetBytes)
+
+        public static uint GetTemperature(DataReceivedEventArgs e)
         {
-            int temperatureOffset = 13 + GetNameLength(packetBytes);
-            return BitConverter.ToInt32(packetBytes, temperatureOffset);
+            byte[] sensorData = e.Data.Select(c => (byte)c).ToArray();
+            var tempInKelvin = BitConverter.ToUInt32(sensorData, GetTemperatureOffset(sensorData));
+            return CelsiusConverter.KelvinToCelsiusAsUInt(tempInKelvin);
         }
 
-        //int humidityOffset = temperatureOffset + 3;
-        //int humidity = BitConverter.ToInt16(packetBytes, humidityOffset);
-        private static int GetNameLength(byte[] packetBytes) => packetBytes[12];
+        public static uint GetHumidity(DataReceivedEventArgs e)
+        {
+            byte[] sensorData = e.Data.Select(c => (byte)c).ToArray();
+            return BitConverter.ToUInt16(sensorData, GetHumidityOffset(sensorData));
+        }
+
+        private static byte GetNameLengthOffset(byte[] sensorData) => sensorData[NameLengthOffset];
+        private static byte GetTemperatureOffset(byte[] sensorData) => sensorData[TemperatureOffset];
+        private static byte GetHumidityOffset(byte[] sensorData) => sensorData[HumidityOffset];
+
     }
 }
