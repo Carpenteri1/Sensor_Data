@@ -11,9 +11,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Services\" />
+    <None Remove="AppData\Logs\" />
+    <None Remove="Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Services\" />
+    <Folder Include="AppData\Logs\" />
+    <Folder Include="Data\" />
   </ItemGroup>
 </Project>
