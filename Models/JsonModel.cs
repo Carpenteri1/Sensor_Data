@@ -1,13 +1,13 @@
-﻿using sensor_data.AbstractClasses;
+﻿using sensor_data.Interfaces;
 
 namespace sensor_data.Models
 {
-    public class JsonModel : AbstractJsonModel
+    public class JsonModel : IJsonModel
     {
-        protected override string Timestamp { get; set; }
-        protected override string SensorName { get; set; }
-        protected override float? Temperature { get; set; }
-        protected override float? Humidity { get; set; }
+        public string Timestamp { get; set; }
+        public string SensorName { get; set; }
+        public float? Temperature { get; set; }
+        public float? Humidity { get; set; }
 
         public JsonModel(
             string timestamp,

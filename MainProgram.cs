@@ -1,10 +1,10 @@
 using System.Diagnostics;
-using sensor_data.Utility.Data.DataStrings;
-using sensor_data.Data.Encoders;
-using sensor_data.Models;
+using sensor_data.Data.DataStrings;
 using sensor_data.Utility;
+using sensor_data.Models;
 using Newtonsoft.Json;
-using sensor_data.Utility.Data.LogData;
+using sensor_data.Utilitys.LogData;
+using sensor_data.Utilitys;
 
 string argument = "";
 var sensorProcess = ProcessBuilder.BuildNewProcessStartInfo(argument);
@@ -28,22 +28,11 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
             throw new ArgumentException(string.Format(
                     ExceptionMessageStrings.IsEmptyOrNull), nameof(e.Data));
 
-        var dataModel = new SensorDataModel
-        {
-            Timestamp = BinaryEncoder.GetTimeStamp(e),
-            SensorName = BinaryEncoder.NameEncoder(e, argument),
-            Temperature = BinaryEncoder.GetTemperature(e),
-            Humidity = BinaryEncoder.GetHumidity(e)
-        };
-        Console.WriteLine(dataModel.ToString());
-        /*
-        LogData.AppendFileAndWrite(dataModel);
-        string logFileName = $"{dataModel.SensorName}_{DateTime.Now:yyyyMMdd}.json";
-        string filePath = Path.Combine(Environment.CurrentDirectory, logFileName);
-        string logEntry = dataModel.ToString();*/
-        //File.WriteAllText(,);
-
-        //Console.WriteLine(string.Format(MainProgramStrings.CompleteDataString),name);
+        LogData.CreateFileAndWrite(new JsonModel(
+                BinaryEncoder.GetTimeStamp(e),
+                BinaryEncoder.NameEncoder(e, argument),
+                BinaryEncoder.GetTemperature(e),
+                BinaryEncoder.GetHumidity(e)));
     }
     catch (FormatException ex)
     {
