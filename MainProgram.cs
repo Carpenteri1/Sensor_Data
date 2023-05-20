@@ -12,8 +12,8 @@ sensorProcess.OutputDataReceived += SensorProcess_OutputDataReceived;
 sensorProcess.BeginOutputReadLine();
 
 // Keep the program running until you decide to stop it
-Console.WriteLine($"{MainProgramStrings.WaitingForSensorData}" +
-    $"\n{MainProgramStrings.PressAnyKeyToStopSensorProgram}");
+Console.WriteLine(MainProgramStrings.WaitingForSensorData);
+Console.WriteLine(MainProgramStrings.PressAnyKeyToStopSensorProgram);
 Console.ReadKey();
 
 sensorProcess.CloseMainWindow();
@@ -33,6 +33,10 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
                 BinaryEncoder.NameEncoder(e, argument),
                 BinaryEncoder.GetTemperature(e),
                 BinaryEncoder.GetHumidity(e)));
+    }
+    catch (ArgumentOutOfRangeException ex)
+    {
+        //Ignore
     }
     catch (FormatException ex)
     {

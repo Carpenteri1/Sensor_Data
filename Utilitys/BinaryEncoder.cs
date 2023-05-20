@@ -31,7 +31,8 @@ namespace sensor_data.Utilitys
                 GetNameLengthOffset(sensorData));
 
             if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(BinaryEncoderStrings.DidntFindNameOrUUID);
+                throw new ArgumentNullException(
+                    BinaryEncoderStrings.DidntFindNameOrUUID);
 
             //TODO need to extract argument value from name using regex
             //if (argument != name)
@@ -41,12 +42,17 @@ namespace sensor_data.Utilitys
 
         public static string GetTimeStamp(DataReceivedEventArgs e)
         {
-            long timestampMillisNetworkOrder = BitConverter.ToInt64(e.Data.Select(c => (byte)c).ToArray(), 4);
+            long timestampMillisNetworkOrder =
+                BitConverter.ToInt64(e.Data.Select(c => (byte)c).ToArray(), 4);
 
             // Convert timestamp from network byte order to host byte order (little-endian)
-            long timestampMillis = IPAddress.NetworkToHostOrder(timestampMillisNetworkOrder);
-            DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(timestampMillis).DateTime;
-            string timestampFormatted = timestamp.ToString(BinaryEncoderStrings.DateTimeISO8601Format);
+            long timestampMillis =
+                IPAddress.NetworkToHostOrder(timestampMillisNetworkOrder);
+            DateTimeOffset timestamp =
+                DateTimeOffset.FromUnixTimeMilliseconds(timestampMillis);
+            string timestampFormatted =
+                timestamp.DateTime.ToString(
+                    BinaryEncoderStrings.DateTimeISO8601Format);
 
             return timestampFormatted;
         }
@@ -54,7 +60,11 @@ namespace sensor_data.Utilitys
         public static uint GetTemperature(DataReceivedEventArgs e)
         {
             byte[] sensorData = e.Data.Select(c => (byte)c).ToArray();
-            var tempInKelvin = BitConverter.ToUInt32(sensorData, GetTemperatureOffset(sensorData));
+
+            var tempInKelvin = BitConverter.ToUInt32(
+                sensorData,
+                GetTemperatureOffset(sensorData));
+
             return CelsiusConverter.KelvinToCelsiusAsUInt(tempInKelvin);
         }
 
@@ -65,9 +75,12 @@ namespace sensor_data.Utilitys
             return BitConverter.ToUInt16(sensorData, GetHumidityOffset(sensorData));
         }
 
-        private static byte GetNameLengthOffset(byte[] sensorData) => sensorData[NameLengthOffset];
-        private static byte GetTemperatureOffset(byte[] sensorData) => sensorData[TemperatureOffset];
-        private static byte GetHumidityOffset(byte[] sensorData) => sensorData[HumidityOffset];
+        private static byte GetNameLengthOffset(byte[] sensorData) =>
+            sensorData[NameLengthOffset];
+        private static byte GetTemperatureOffset(byte[] sensorData) =>
+            sensorData[TemperatureOffset];
+        private static byte GetHumidityOffset(byte[] sensorData) =>
+            sensorData[HumidityOffset];
 
     }
 }
