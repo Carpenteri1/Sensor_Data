@@ -5,8 +5,11 @@ using sensor_data.Models;
 using Newtonsoft.Json;
 using sensor_data.Utilitys.LogData;
 using sensor_data.Utilitys;
+using sensor_data.Exceptions;
 
-string argument = "";
+Console.Write(MainProgramStrings.EnterNameArgumentOrPressEnter);
+string argument = Console.ReadLine();
+
 var sensorProcess = ProcessBuilder.BuildNewProcessStartInfo(argument);
 sensorProcess.OutputDataReceived += SensorProcess_OutputDataReceived;
 sensorProcess.BeginOutputReadLine();
@@ -37,6 +40,10 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
     catch (ArgumentOutOfRangeException ex)
     {
         //Ignore
+    }
+    catch(NameDidntMatchArgumentException ex)
+    {
+        Console.WriteLine(ex.Message);
     }
     catch (FormatException ex)
     {

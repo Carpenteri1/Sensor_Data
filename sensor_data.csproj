@@ -13,9 +13,11 @@
   <ItemGroup>
     <None Remove="AppData\Logs\" />
     <None Remove="Data\" />
+    <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AppData\Logs\" />
     <Folder Include="Data\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
