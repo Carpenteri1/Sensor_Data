@@ -3,6 +3,7 @@ using System.Net;
 using System.Text;
 using sensor_data.Utilitys;
 using sensor_data.Data.DataStrings;
+using sensor_data.Exceptions;
 
 namespace sensor_data.Utilitys
 {
@@ -32,12 +33,14 @@ namespace sensor_data.Utilitys
 
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(
-                    BinaryEncoderStrings.DidntFindNameOrUUID);
+                    ExceptionMessageStrings.DidntFindNameOrUUID);
 
-            //TODO need to extract argument value from name using regex
-            //if (argument != name)
-            //   throw new ArgumentException();
-            return name;
+            if (string.IsNullOrEmpty(argument))
+                return !DataVadility.IsValidUUID(name) ?
+                    throw new UUIDIsNotValidException(argument) : name;
+
+            return argument != name ?
+                throw new NameDidntMatchArgumentException(argument) : name;
         }
 
         public static string GetTimeStamp(DataReceivedEventArgs e)

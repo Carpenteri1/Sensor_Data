@@ -22,13 +22,15 @@ namespace sensor_data.Utilitys.LogData
 			}
 			catch (DirectoryNotFoundException e)
 			{
-				Console.WriteLine(string.Format(LogDataStrings.CouldNotLogFile,
+				Console.WriteLine(string.Format(
+					ExceptionMessageStrings.CouldNotLogFile,
 					jsonModel.SensorName, e.Message));
                 return false;
             }
             catch (Exception e)
 			{
-				Console.WriteLine(string.Format(LogDataStrings.CouldNotLogFile,
+				Console.WriteLine(string.Format(
+					ExceptionMessageStrings.CouldNotLogFile,
                     jsonModel.SensorName,
 					e.Message));
 				return false;
