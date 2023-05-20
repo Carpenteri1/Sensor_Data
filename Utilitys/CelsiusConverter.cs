@@ -2,7 +2,7 @@
 {
 	public static class CelsiusConverter
 	{
-		public static float KelvinToCelsiusAsFloat(uint kelvinValue)
+		public static float KelvinToCelsiusAsFloat(uint kelvinValue)//TODO remove
 		{
             float kelviValueToFloat = kelvinValue; // Implicit conversion from uint to float
             return kelviValueToFloat - 273.15f; // Convert Kelvin to Celsius
