@@ -14,7 +14,6 @@ var sensorProcess = ProcessBuilder.BuildNewProcessStartInfo(argument);
 sensorProcess.OutputDataReceived += SensorProcess_OutputDataReceived;
 sensorProcess.BeginOutputReadLine();
 
-// Keep the program running until you decide to stop it
 Console.WriteLine(MainProgramStrings.WaitingForSensorData);
 Console.WriteLine(MainProgramStrings.PressAnyKeyToStopSensorProgram);
 Console.ReadKey();

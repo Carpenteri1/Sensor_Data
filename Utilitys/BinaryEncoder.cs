@@ -9,11 +9,12 @@ namespace sensor_data.Utilitys
 {
     public static class BinaryEncoder
     {
-        const int PacketLengthOffset = 0;
         private const int NameLengthOffset = 12;
         private const int NameOffset = 13;
         private const int TemperatureOffset = NameLengthOffset + NameOffset;
         private const int HumidityOffset = TemperatureOffset + 3;
+        private static bool temperaturePresent;
+        private static int offsetWithoutTemp = 0;
 
         public static string NameEncoder(DataReceivedEventArgs e, string argument)
         {
@@ -60,22 +61,32 @@ namespace sensor_data.Utilitys
             return timestampFormatted;
         }
 
-        public static uint GetTemperature(DataReceivedEventArgs e)
+        public static uint? GetTemperature(DataReceivedEventArgs e)
         {
             byte[] sensorData = e.Data.Select(c => (byte)c).ToArray();
+            offsetWithoutTemp = GetOffsetWithoutTemp(sensorData);
+            temperaturePresent = (sensorData.Length >= offsetWithoutTemp + 3);
 
-            var tempInKelvin = BitConverter.ToUInt32(
-                sensorData,
-                GetTemperatureOffset(sensorData));
-
-            return CelsiusConverter.KelvinToCelsiusAsUInt(tempInKelvin);
+            if (temperaturePresent)
+                return BitConverter.ToUInt32(sensorData, offsetWithoutTemp);
+            
+            return null;
         }
 
-        //TODO if there is no temp should be 13 + nlen
-        public static uint GetHumidity(DataReceivedEventArgs e)
+        public static uint? GetHumidity(DataReceivedEventArgs e)
         {
             byte[] sensorData = e.Data.Select(c => (byte)c).ToArray();
-            return BitConverter.ToUInt16(sensorData, GetHumidityOffset(sensorData));
+            offsetWithoutTemp = GetOffsetWithoutTemp(sensorData);
+            temperaturePresent = (sensorData.Length >= offsetWithoutTemp + 3);
+            bool humidityPresent = (sensorData.Length >= offsetWithoutTemp + 2);
+
+            if (temperaturePresent && humidityPresent)
+                return BitConverter.ToUInt16(sensorData, offsetWithoutTemp + 3);
+            
+            else if (!temperaturePresent && humidityPresent)
+                return BitConverter.ToUInt16(sensorData, offsetWithoutTemp);
+            
+            return null;
         }
 
         private static byte GetNameLengthOffset(byte[] sensorData) =>
@@ -84,6 +95,8 @@ namespace sensor_data.Utilitys
             sensorData[TemperatureOffset];
         private static byte GetHumidityOffset(byte[] sensorData) =>
             sensorData[HumidityOffset];
+        private static int GetOffsetWithoutTemp(byte[] sensorData) =>
+            NameOffset + GetNameLengthOffset(sensorData);
 
     }
 }
