@@ -9,10 +9,14 @@ namespace sensor_data_nunit_tests.Utilitys
     {
         private const int NameOffset = 13;
         private const int NameLengthOffset = 12;
-        private const int TemperatureOffset = NameLengthOffset + NameOffset + 3;
-        private const int HumidityOffsetNoTemp = NameOffset + NameLengthOffset + 1;
-        private const int HumidityOffsetWithTemp = NameOffset + NameLengthOffset + 1 + 3;
+        //private const int TemperatureOffset = NameLengthOffset + NameOffset + 3;
+        //private const int HumidityOffsetNoTemp = NameOffset + NameLengthOffset + 1;
+        //private const int HumidityOffsetWithTemp = NameOffset + NameLengthOffset + 1 + 3;
 
+        private const int TemperatureOffset = NameLengthOffset + NameOffset + 1 + 3;
+        private const int HumidityOffsetNoTemp = NameOffset + NameLengthOffset + 1;
+        private const int HumidityOffsetWithTemp = NameOffset + NameLengthOffset + 2 + 3;
+        private const int NoTempOrHumOffset = NameOffset + NameLengthOffset + 1;
 
         public static byte[] GetMockSensorData(string name, float? temperature, uint? humidity)
         {

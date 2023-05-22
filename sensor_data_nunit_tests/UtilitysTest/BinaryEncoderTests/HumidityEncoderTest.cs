@@ -10,6 +10,9 @@ namespace sensor_data_nunit_tests.UtilitysTest.BinaryEncoderTests
         [Test]
         public void GetHumidity_WithTemperatureAndHumidity_ReturnsHumidityValue()
         {
+            //TODO Remeber to fix offset and also
+            //Make sure that we add tempereture and humidity if they are present
+            //Array.Copy(humidityBytes, 0, mockData, humidityOffset, humidityBytes.Length);
             string sensorName = "Sensor1";
             float temperature = 25.5f;
             uint humidity = 50;
@@ -20,9 +23,12 @@ namespace sensor_data_nunit_tests.UtilitysTest.BinaryEncoderTests
             Assert.AreEqual(humidity, result);
         }
 
+
         [Test]
         public void GetHumidity_WithNullTemperatureAndNullHumidity_ReturnsNull()
         {
+            //TODO Remeber to fix offset and also
+            //Array.Copy(humidityBytes, 0, mockData, humidityOffset, humidityBytes.Length);
             string sensorName = "Sensor1";
             float? temperature = null;
             uint? humidity = null;
@@ -36,9 +42,26 @@ namespace sensor_data_nunit_tests.UtilitysTest.BinaryEncoderTests
         [Test]
         public void GetHumidity_WithNullTemperatureAndNonNullHumidity_ReturnsHumidityValue()
         {
+            //TODO could be  faulte test, make sure that we are not for both temperature
+            //and humidity even if the test says we dont.
             string sensorName = "Sensor1";
             float? temperature = null;
             uint humidity = 50;
+
+            byte[] mockSensorData = MockData.GetMockSensorData(sensorName, temperature, humidity);
+            uint? result = BinaryEncoder.GetHumidity(mockSensorData);
+            Assert.AreEqual(humidity, result);
+        }
+
+
+        [Test]
+        public void GetHumidity_WithTemperatureAndNullHumidity_ReturnsHumidityValue()
+        {
+            //TODO could be  faulte test, make sure that we are not for both temperature
+            //and humidity even if the test says we dont.
+            string sensorName = "Sensor1";
+            float? temperature = 25.5f;
+            uint? humidity = null;
 
             byte[] mockSensorData = MockData.GetMockSensorData(sensorName, temperature, humidity);
             uint? result = BinaryEncoder.GetHumidity(mockSensorData);

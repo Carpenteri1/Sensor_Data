@@ -7,14 +7,17 @@ using sensor_data.Exceptions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Xml.Linq;
 
+
+
 namespace sensor_data.Utilitys
 {
     public static class BinaryEncoder
     {
         private const int NameLengthOffset = 12;
         private const int NameOffset = 13;
-        private const int TemperatureOffset = NameLengthOffset + NameOffset + 3;
-        private const int HumidityOffsetWithTemp = NameOffset + NameLengthOffset + 1 + 3;
+        private const int TemperatureOffset = NameLengthOffset + NameOffset + 1 + 3;
+        private const int HumidityOffsetNoTemp = NameOffset + NameLengthOffset + 1;
+        private const int HumidityOffsetWithTemp = TemperatureOffset + 3;
         private const int NoTempOrHumOffset = NameOffset + NameLengthOffset + 1;
         private static bool temperaturePresent;
         private static bool humidityPresent;
@@ -79,9 +82,14 @@ namespace sensor_data.Utilitys
         {
             temperaturePresent = (sensorData.Length >= TemperatureOffset);
             humidityPresent    = (sensorData.Length >= HumidityOffsetWithTemp);
-            return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset); 
+            //return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset); 
 
-            if (temperaturePresent && humidityPresent)
+            //We remove temp and humidty so we start from there offset.
+            if (!temperaturePresent && humidityPresent)
+                return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
+            else if (temperaturePresent && humidityPresent)
+                return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
+            else if (temperaturePresent && !humidityPresent)
                 return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
 
             return null;
