@@ -1,0 +1,17 @@
+/Users/niclas/.repo/sensor_data/sensor_data/bin/Debug/net7.0/sensor_data
+/Users/niclas/.repo/sensor_data/sensor_data/bin/Debug/net7.0/sensor_data.deps.json
+/Users/niclas/.repo/sensor_data/sensor_data/bin/Debug/net7.0/sensor_data.runtimeconfig.json
+/Users/niclas/.repo/sensor_data/sensor_data/bin/Debug/net7.0/sensor_data.dll
+/Users/niclas/.repo/sensor_data/sensor_data/bin/Debug/net7.0/sensor_data.pdb
+/Users/niclas/.repo/sensor_data/sensor_data/bin/Debug/net7.0/Newtonsoft.Json.dll
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.csproj.AssemblyReference.cache
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.GeneratedMSBuildEditorConfig.editorconfig
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.AssemblyInfoInputs.cache
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.AssemblyInfo.cs
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.csproj.CoreCompileInputs.cache
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.csproj.CopyComplete
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.dll
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/refint/sensor_data.dll
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.pdb
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/sensor_data.genruntimeconfig.cache
+/Users/niclas/.repo/sensor_data/sensor_data/obj/Debug/net7.0/ref/sensor_data.dll

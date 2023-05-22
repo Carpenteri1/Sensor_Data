@@ -5,19 +5,13 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <BaseDirectory>sensor_data</BaseDirectory>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="AppData\Logs\" />
-    <None Remove="Data\" />
-    <None Remove="Exceptions\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AppData\Logs\" />
-    <Folder Include="Data\" />
-    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
