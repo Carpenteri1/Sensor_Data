@@ -9,9 +9,6 @@ namespace sensor_data_nunit_tests.Utilitys
     {
         private const int NameOffset = 13;
         private const int NameLengthOffset = 12;
-        //private const int TemperatureOffset = NameLengthOffset + NameOffset + 3;
-        //private const int HumidityOffsetNoTemp = NameOffset + NameLengthOffset + 1;
-        //private const int HumidityOffsetWithTemp = NameOffset + NameLengthOffset + 1 + 3;
 
         private const int TemperatureOffset = NameLengthOffset + NameOffset + 1 + 3;
         private const int HumidityOffsetNoTemp = NameOffset + NameLengthOffset + 1;
@@ -56,8 +53,8 @@ namespace sensor_data_nunit_tests.Utilitys
                 Array.Copy(temperatureBytes, 0, mockData, packetLengthBytes.Length + timestampSize + nameLengthBytes.Length + nameBytes.Length, temperatureBytes.Length);
             }
 
-            int temperatureOffset = packetLengthBytes.Length + timestampSize + nameLengthBytes.Length + nameBytes.Length;
-            int humidityOffset = (temperature != null) ? temperatureOffset + temperatureSize : HumidityOffsetNoTemp;
+            int temperatureOffset = packetLengthBytes.Length + timestampSize + nameLengthBytes.Length + nameBytes.Length + 1; // Add 1 for nameLengthSize byte
+            int humidityOffset = (temperature != null) ? temperatureOffset + temperatureSize + 2 : HumidityOffsetNoTemp; // Add 2 for temperatureSize bytes
 
             if (humidity != null)
             {
@@ -71,7 +68,19 @@ namespace sensor_data_nunit_tests.Utilitys
                     Array.Resize(ref mockData, requiredLength);
                 }
 
-                Array.Copy(humidityBytes, 0, mockData, humidityOffset, humidityBytes.Length);
+                if (temperature != null)
+                {
+                    if (temperatureBytes.Length == 3) // Ensure the length is correct
+                    {
+                        Array.Copy(temperatureBytes, 0, mockData, temperatureOffset, temperatureBytes.Length);
+                    }
+                }
+
+                if (humidityBytes.Length == 4) // Ensure the length is correct
+                {
+                    Array.Copy(humidityBytes, 0, mockData, humidityOffset, humidityBytes.Length);
+                }
+
             }
 
             return mockData;

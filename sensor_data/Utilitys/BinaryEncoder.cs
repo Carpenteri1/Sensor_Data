@@ -88,7 +88,10 @@ namespace sensor_data.Utilitys
             if (!temperaturePresent && humidityPresent)
                 return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
             else if (temperaturePresent && humidityPresent)
-                return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
+            {
+                var temp = BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
+                return temp;
+            }
             else if (temperaturePresent && !humidityPresent)
                 return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
 
