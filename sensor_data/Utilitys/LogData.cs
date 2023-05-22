@@ -12,7 +12,7 @@ namespace sensor_data.Utilitys.LogData
 		public static bool CreateFileAndWrite(JsonModel jsonModel)
 		{ 
 			try
-			{
+			{	
                 string json = JsonConvertObject(jsonModel) + Environment.NewLine;
 				string filePath = Path.Combine(LogDataStrings.LogsFilePath,
 					LogDataStrings.LogFileName);

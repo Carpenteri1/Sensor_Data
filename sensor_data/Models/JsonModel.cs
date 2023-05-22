@@ -1,4 +1,5 @@
-﻿using sensor_data.Interfaces;
+﻿using Newtonsoft.Json;
+using sensor_data.Interfaces;
 
 namespace sensor_data.Models
 {
@@ -6,7 +7,10 @@ namespace sensor_data.Models
     {
         public string Timestamp { get; set; }
         public string SensorName { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float? Temperature { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float? Humidity { get; set; }
 
         public JsonModel(

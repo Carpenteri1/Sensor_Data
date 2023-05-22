@@ -9,8 +9,8 @@ using sensor_data.Exceptions;
 using System;
 using System.Net;
 
-//Console.Write(MainProgramStrings.EnterNameArgumentOrPressEnter);
-string argument = string.Empty;//Console.ReadLine();
+Console.Write(MainProgramStrings.EnterNameArgumentOrPressEnter);
+string argument = Console.ReadLine();
 Console.Clear();
 Task.Run(async () => await RunSensorProcess(argument));
 
@@ -35,7 +35,7 @@ void SensorProcess_OutputDataReceived(object sender, DataReceivedEventArgs e)
     }
     catch (ArgumentOutOfRangeException ex)
     {
-        Console.WriteLine(ex.Message);
+           //ignore
     }
     catch (NameDidntMatchArgumentException ex)
     {

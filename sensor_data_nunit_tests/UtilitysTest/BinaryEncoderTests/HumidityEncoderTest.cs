@@ -9,10 +9,7 @@ namespace sensor_data_nunit_tests.UtilitysTest.BinaryEncoderTests
 
         [Test]
         public void GetHumidity_WithTemperatureAndHumidity_ReturnsHumidityValue()
-        {
-            //TODO Remeber to fix offset and also
-            //Make sure that we add tempereture and humidity if they are present
-            //Array.Copy(humidityBytes, 0, mockData, humidityOffset, humidityBytes.Length);
+        {;
             string sensorName = "Sensor1";
             float temperature = 25.5f;
             uint humidity = 50;
