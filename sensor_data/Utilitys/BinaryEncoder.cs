@@ -5,6 +5,7 @@ using sensor_data.Utilitys;
 using sensor_data.Data.DataStrings;
 using sensor_data.Exceptions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Xml.Linq;
 
 namespace sensor_data.Utilitys
 {
@@ -12,9 +13,11 @@ namespace sensor_data.Utilitys
     {
         private const int NameLengthOffset = 12;
         private const int NameOffset = 13;
-        private const int TemperatureOffset = NameLengthOffset + NameOffset;
-        private const int HumidityOffset = TemperatureOffset + 3;
+        private const int TemperatureOffset = NameLengthOffset + NameOffset + 3;
+        private const int HumidityOffsetWithTemp = NameOffset + NameLengthOffset + 1 + 3;
+        private const int NoTempOrHumOffset = NameOffset + NameLengthOffset + 1;
         private static bool temperaturePresent;
+        private static bool humidityPresent;
         private static int offsetWithoutTemp = 0;
 
         public static string NameEncoder(byte[] sensorData, string argument)
@@ -46,11 +49,13 @@ namespace sensor_data.Utilitys
 
         public static string GetTimeStamp(byte[] data)
         {
-            var timestampMillisNetworkOrder = BitConverter.ToInt64(data, 0);
-            long timestampMillis =
-                 IPAddress.NetworkToHostOrder(timestampMillisNetworkOrder);
+
+            uint networkOrder = BitConverter.ToUInt32(data, 0);
+            long timestampMillisNetworkOrder =
+                IPAddress.NetworkToHostOrder(networkOrder);
+
             DateTimeOffset timestamp =
-                DateTimeOffset.FromUnixTimeMilliseconds(timestampMillis);
+                DateTimeOffset.FromUnixTimeMilliseconds(timestampMillisNetworkOrder);
             string timestampFormatted =
                 timestamp.DateTime.ToString(
                     BinaryEncoderStrings.DateTimeISO8601Format);
@@ -70,38 +75,26 @@ namespace sensor_data.Utilitys
             return null;
         }
 
-        public static uint? GetHumidity(byte[] sensorData)
+        public static uint? GetHumidity(byte[] sensorData )
         {
-            int offsetWithoutTemp = GetOffsetWithoutTemp(sensorData);
-            bool temperaturePresent = (sensorData.Length >= offsetWithoutTemp);
-            bool humidityPresent = (sensorData.Length >= offsetWithoutTemp + 2);
+            temperaturePresent = (sensorData.Length >= TemperatureOffset);
+            humidityPresent    = (sensorData.Length >= HumidityOffsetWithTemp);
+            return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset); 
 
-            if (temperaturePresent)
-            {
-                return BitConverter.ToUInt32(sensorData, offsetWithoutTemp + 3);
-            }
-            else if (!temperaturePresent && humidityPresent)
-            {
-                return BitConverter.ToUInt16(sensorData, offsetWithoutTemp + 1);
-            }
+            if (temperaturePresent && humidityPresent)
+                return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
 
             return null;
         }
-
-        private static int GetOffsetWithoutTemp(byte[] sensorData)
-        {
-            int nameLengthOffset = sensorData[12]; // Add 4 to skip the packet length bytes
-            int nameOffset = sensorData[13]; // Add 4 to skip the packet length bytes
-            return NameOffset + NameLengthOffset;
-        }
-
 
         private static byte GetNameLengthOffset(byte[] sensorData) =>
             sensorData[NameLengthOffset];
         private static byte GetTemperatureOffset(byte[] sensorData) =>
             sensorData[TemperatureOffset];
-        private static byte GetHumidityOffset(byte[] sensorData) =>
-            sensorData[HumidityOffset];
+        /*private static byte GetHumidityOffset(byte[] sensorData) =>
+            sensorData[HumidityOffsetNoTemp];*/
+        private static int GetOffsetWithoutTemp(byte[] sensorData) =>
+            NameOffset + GetNameLengthOffset(sensorData);
 
     }
 }
