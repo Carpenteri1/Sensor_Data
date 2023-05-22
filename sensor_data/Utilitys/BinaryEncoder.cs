@@ -82,16 +82,11 @@ namespace sensor_data.Utilitys
         {
             temperaturePresent = (sensorData.Length >= TemperatureOffset);
             humidityPresent    = (sensorData.Length >= HumidityOffsetWithTemp);
-            //return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset); 
 
-            //We remove temp and humidty so we start from there offset.
             if (!temperaturePresent && humidityPresent)
                 return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
             else if (temperaturePresent && humidityPresent)
-            {
-                var temp = BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
-                return temp;
-            }
+                BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
             else if (temperaturePresent && !humidityPresent)
                 return BitConverter.ToUInt32(sensorData, NoTempOrHumOffset);
 
@@ -102,8 +97,6 @@ namespace sensor_data.Utilitys
             sensorData[NameLengthOffset];
         private static byte GetTemperatureOffset(byte[] sensorData) =>
             sensorData[TemperatureOffset];
-        /*private static byte GetHumidityOffset(byte[] sensorData) =>
-            sensorData[HumidityOffsetNoTemp];*/
         private static int GetOffsetWithoutTemp(byte[] sensorData) =>
             NameOffset + GetNameLengthOffset(sensorData);
 
